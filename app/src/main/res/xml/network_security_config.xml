@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">mdakbar.in</domain>
+        <domain includeSubdomains="true">bestfoodathome.com</domain>
+    </domain-config>
+</network-security-config>
