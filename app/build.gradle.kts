@@ -1,3 +1,4 @@
+import com.android.build.gradle.tasks.ProcessApplicationManifest.Companion.getArtifactName
 import org.gradle.kotlin.dsl.implementation
 
 
@@ -5,7 +6,11 @@ import org.gradle.kotlin.dsl.implementation
 apply {
     //from("../ktlint.gradle.kts")
     //from("../jacoco.gradle.kts")
+    //from("../util.gradle.kts")
 }
+
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -22,8 +27,8 @@ android {
         applicationId = "com.webapp.acpsnews"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 101
+        versionName = "1.01"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
