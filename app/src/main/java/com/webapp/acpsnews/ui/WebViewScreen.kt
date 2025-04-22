@@ -1,7 +1,6 @@
 package com.webapp.acpsnews.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
@@ -12,18 +11,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @SuppressLint("SetJavaScriptEnabled", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun WebViewScreen(viewModel: WebViewViewModel) {
+fun WebViewScreen(viewModel: WebViewViewModel = viewModel()) {
 
     val url by viewModel.url.collectAsState()
     val context = LocalContext.current
@@ -39,7 +43,7 @@ fun WebViewScreen(viewModel: WebViewViewModel) {
 
    Scaffold(
 
-    /*topBar = {
+    topBar = {
         TopAppBar(
 
             title = { Text("Sahasra acps news") },
@@ -61,7 +65,7 @@ fun WebViewScreen(viewModel: WebViewViewModel) {
                 }
             }
         )
-    },*/
+    }/*,
     bottomBar = {
         BottomNavigation(elevation = 8.dp) {
             val items = listOf(
@@ -71,6 +75,7 @@ fun WebViewScreen(viewModel: WebViewViewModel) {
                 "e-Paper" to "https://acpsnews.in/epaper",
                 "Contact" to "https://acpsnews.in"
             )
+            //https://acpsnews.in/privacy-policy/
 
             items.forEach { (label, link) ->
                 BottomNavigationItem(
@@ -88,7 +93,7 @@ fun WebViewScreen(viewModel: WebViewViewModel) {
                 )
             }
         }
-    }
+    }*/
 ) { paddingValues ->
     // Content of your screen goes here
     // Use Modifier.padding(paddingValues) to avoid content overlapping with top and bottom bars.
