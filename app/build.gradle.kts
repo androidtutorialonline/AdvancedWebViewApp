@@ -1,9 +1,17 @@
 import org.gradle.kotlin.dsl.implementation
 
+
+
+apply {
+    //from("../ktlint.gradle.kts")
+    //from("../jacoco.gradle.kts")
+}
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("io.gitlab.arturbosch.detekt") version "1.23.0"
+
 }
 
 android {

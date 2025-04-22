@@ -4,9 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class WebViewViewModel : ViewModel() {
-    var url by mutableStateOf("https://acpsnews.in")
+    //var url by mutableStateOf("https://acpsnews.in")
+    private val _currentUrl = MutableStateFlow("https://acpsnews.in")
+    val url: StateFlow<String> = _currentUrl
+
+    fun updateUrl(url: String) {
+        _currentUrl.value = url
+    }
     var canGoBack by mutableStateOf(false)
     var canGoForward by mutableStateOf(false)
     //var isRefreshing by mutableStateOf(false)

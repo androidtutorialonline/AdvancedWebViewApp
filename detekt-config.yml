@@ -1,0 +1,23 @@
+build:
+  maxIssues: 5
+  weights:
+    complexity: 2
+    LongParameterList: 1
+    style: 1
+
+style:
+  MagicNumber:
+    active: true
+    ignoreNumbers: [-1, 0, 1, 2]
+  OptionalUnit:
+    active: true
+
+complexity:
+  LongMethod:
+    threshold: 40
+  LargeClass:
+    threshold: 500
+
+formatting:
+  active: true
+  autoCorrect: true
