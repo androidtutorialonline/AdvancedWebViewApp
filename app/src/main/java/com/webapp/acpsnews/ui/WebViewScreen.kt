@@ -11,8 +11,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import com.webapp.acpsnews.R
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,78 +19,73 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.webapp.acpsnews.MenuItem
 
 @SuppressLint("SetJavaScriptEnabled", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun WebViewScreen(viewModel: WebViewViewModel) {
+fun WebViewScreen(viewModel: WebViewViewModel, pageName: String? = "") {
 
     val url by viewModel.url.collectAsState()
     val context = LocalContext.current
     var webView: WebView? = null
     var filePathCallback by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
 
-    val filePickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
-        filePathCallback?.onReceiveValue(arrayOf(it ?: Uri.EMPTY))
-        filePathCallback = null
-    }
+    val filePickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+            filePathCallback?.onReceiveValue(arrayOf(it ?: Uri.EMPTY))
+            filePathCallback = null
+        }
 
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
 
-   Scaffold(
+    Scaffold(
 
-    /*topBar = {
-        TopAppBar(
+        bottomBar = {
+            BottomNavigation(elevation = 8.dp) {
 
-            title = { Text("Sahasra acps news") },
-            actions = {
-                IconButton(onClick = {
-                    webView?.goBack()
-                }, enabled = viewModel.canGoBack) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                }
-                IconButton(onClick = {
-                    webView?.goForward()
-                }, enabled = viewModel.canGoForward) {
-                    Icon(Icons.Default.ArrowForward, contentDescription = "Forward")
-                }
-                IconButton(onClick = {
-                    webView?.reload()
-                }) {
-                    Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-                }
-            }
-        )
-    },*/
-    bottomBar = {
-        BottomNavigation(elevation = 8.dp) {
-            val items = listOf(
-                "News" to "https://acpsnews.in",
-                "TV" to "https://www.youtube.com/@sahasraacpanews",
-                "Radio" to "https://acpsnews.in",
-                "e-Paper" to "https://acpsnews.in/epaper",
-                "Contact" to "https://acpsnews.in"
-            )
+                var items =
+                    mutableListOf(
+                        MenuItem("News", "https://acpsnews.in", R.drawable.newspaper),
+                        MenuItem(
+                            "TV", "https://www.youtube.com/@sahasraacpanews",
+                            R.drawable.television
+                        ),
+                        MenuItem("Radio", " ", R.drawable.radio),
+                        MenuItem("e-Paper", "https://acpsnews.in/epaper", R.drawable.newspaper)
+                    )
 
-            items.forEach { (label, link) ->
-                BottomNavigationItem(
-                    icon = {},
-                    label = { Text(label) },
-                    selected = url == link,
-                    onClick = {
-                        if (label == "Contact") { // Example: Assuming you have an "About Us" item
-                            //AboutUsScreen()
-                        } else {
-                            viewModel.updateUrl(link)
-                            webView?.loadUrl(link)
+
+                if (pageName == "Privacy Policy") {
+                    items.add(MenuItem("Privacy Policy", " ", R.drawable.location))
+                } else {
+                    items.add(MenuItem("Contact", " ", R.drawable.location))
+                }
+
+                items.forEach { (label, link) ->
+
+                    BottomNavigationItem(
+                        icon = {},
+                        label = { Text(label) },
+                        selected = url == link,
+                        onClick = {
+                            if (label == "Contact") { // Example: Assuming you have an "About Us" item
+                                val intent = Intent(context, AboutUsScreen::class.java)
+                                context.startActivity(intent)
+                            } else if (label == "Radio") {
+                                val intent = Intent(context, RadioScreen::class.java)
+                                context.startActivity(intent)
+                            } else {
+                                viewModel.updateUrl(link)
+                                webView?.loadUrl(link)
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
-    }
-) { paddingValues ->
-    // Content of your screen goes here
-    // Use Modifier.padding(paddingValues) to avoid content overlapping with top and bottom bars.
+    ) { paddingValues ->
+        // Content of your screen goes here
+        // Use Modifier.padding(paddingValues) to avoid content overlapping with top and bottom bars.
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = {
@@ -111,7 +105,11 @@ fun WebViewScreen(viewModel: WebViewViewModel) {
                         settings.setSupportMultipleWindows(true)
 
                         webViewClient = object : WebViewClient() {
-                            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                            override fun onPageStarted(
+                                view: WebView?,
+                                url: String?,
+                                favicon: Bitmap?
+                            ) {
                                 viewModel.setRefreshing(true)
                             }
 
@@ -123,7 +121,10 @@ fun WebViewScreen(viewModel: WebViewViewModel) {
                                 viewModel.setRefreshing(false)
 
                                 // JavaScript injection
-                                evaluateJavascript("document.body.style.backgroundColor = '#FAFAFA';", null)
+                                evaluateJavascript(
+                                    "document.body.style.backgroundColor = '#FAFAFA';",
+                                    null
+                                )
                             }
 
                             override fun onReceivedError(
@@ -132,7 +133,11 @@ fun WebViewScreen(viewModel: WebViewViewModel) {
                                 error: WebResourceError?
                             ) {
                                 viewModel.setRefreshing(false)
-                                Toast.makeText(context, "Error: ${error?.description}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Error: ${error?.description}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
 
@@ -153,7 +158,6 @@ fun WebViewScreen(viewModel: WebViewViewModel) {
                 },
                 update = { webView = it }
             )
-
 
 
         }

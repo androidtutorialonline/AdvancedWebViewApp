@@ -13,7 +13,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WebViewScreen(viewModel)
+            val data = intent.extras
+            WebViewScreen(viewModel,  data?.getString("pageName") ?:" ")
         }
     }
 }

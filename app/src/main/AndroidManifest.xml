@@ -27,6 +27,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.AboutUsScreen"
+            android:exported="true"
+            android:label="AboutUsScreen"
+            android:theme="@style/Theme.MyApplication">
+
+        </activity>
+
+        <activity
+            android:name=".ui.RadioScreen"
+            android:theme="@style/Theme.MyApplication">
+
+        </activity>
+
+
     </application>
 
 </manifest>
