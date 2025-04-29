@@ -12,12 +12,11 @@ class MainActivity : ComponentActivity() {
     private val viewModel: WebViewViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         enableEdgeToEdge() // Add this
         super.onCreate(savedInstanceState)
         setContent {
             val data = intent.extras
-            WebViewScreen(viewModel,  data?.getString("pageName") ?:" ")
+            WebViewScreen(viewModel, data?.getString("pageName") ?: " ")
         }
     }
 }

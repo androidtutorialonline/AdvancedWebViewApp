@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class WebViewViewModel : ViewModel() {
-    //var url by mutableStateOf("https://acpsnews.in")
     private val _currentUrl = MutableStateFlow("https://acpsnews.in")
     val url: StateFlow<String> = _currentUrl
 
@@ -17,7 +16,7 @@ class WebViewViewModel : ViewModel() {
     }
     var canGoBack by mutableStateOf(false)
     var canGoForward by mutableStateOf(false)
-    //var isRefreshing by mutableStateOf(false)
+    // var isRefreshing by mutableStateOf(false)
 
     fun updateNavigationState(canGoBack: Boolean, canGoForward: Boolean) {
         this.canGoBack = canGoBack
@@ -25,6 +24,6 @@ class WebViewViewModel : ViewModel() {
     }
 
     fun setRefreshing(refreshing: Boolean) {
-        //isRefreshing = refreshing
+        // isRefreshing = refreshing
     }
 }

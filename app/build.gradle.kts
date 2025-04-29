@@ -1,5 +1,4 @@
-import org.gradle.kotlin.dsl.implementation
-import org.gradle.kotlin.dsl.test
+
 
 
 plugins {
@@ -8,15 +7,12 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("io.gitlab.arturbosch.detekt") version "1.23.0"
     id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
-    //alias("java")
-
-    id ("jacoco") // Add JaCoCo plugin
-
+    id("jacoco") // Add JaCoCo plugin
 }
 
 apply {
-    //from("../ktlint.gradle.kts")
-    //from("../jacoco.gradle.kts")
+    // from("../ktlint.gradle.kts")
+    // from("../jacoco.gradle.kts")
 }
 
 android {
@@ -38,7 +34,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -54,9 +50,8 @@ android {
     }
 
     composeOptions {
-        //kotlinCompilerExtensionVersion '1.5.2'
+        // kotlinCompilerExtensionVersion '1.5.2'
     }
-
 }
 
 /*tasks.test {
@@ -75,7 +70,6 @@ ktlint {
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {
-    //dependsOn(tasks.test)
     dependsOn("testDebugUnitTest")
 
     reports {
@@ -84,13 +78,13 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     }
 
     val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*")
-    val debugTree = fileTree("${buildDir}/intermediates/javac/debug") {
+    val debugTree = fileTree("$buildDir/intermediates/javac/debug") {
         exclude(fileFilter)
     }
 
     classDirectories.setFrom(debugTree)
     sourceDirectories.setFrom(files("src/main/java"))
-    executionData.setFrom(files("${buildDir}/jacoco/test.exec"))
+    executionData.setFrom(files("$buildDir/jacoco/test.exec"))
 }
 
 dependencies {
@@ -111,13 +105,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation ("androidx.activity:activity-compose:1.10.1")
-    implementation ("androidx.compose.ui:ui:1.7.8")
-    implementation ("androidx.compose.material:material:1.7.8")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation ("com.google.accompanist:accompanist-swiperefresh:0.30.1")
-
-
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.accompanist.swiperefresh)
 }
