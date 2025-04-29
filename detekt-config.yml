@@ -24,6 +24,3 @@ complexity:
   LargeClass:
     threshold: 500
 
-formatting:
-  active: true
-  autoCorrect: true
