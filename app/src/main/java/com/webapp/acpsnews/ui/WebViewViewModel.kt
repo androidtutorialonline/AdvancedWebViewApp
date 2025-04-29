@@ -16,7 +16,7 @@ class WebViewViewModel : ViewModel() {
     }
     var canGoBack by mutableStateOf(false)
     var canGoForward by mutableStateOf(false)
-    var isRefreshing by mutableStateOf(false)
+    var isRefreshingPage by mutableStateOf(false)
 
     fun updateNavigationState(canGoBack: Boolean, canGoForward: Boolean) {
         this.canGoBack = canGoBack
@@ -24,6 +24,6 @@ class WebViewViewModel : ViewModel() {
     }
 
     fun setRefreshing(refreshing: Boolean) {
-        isRefreshing = refreshing
+        isRefreshingPage = refreshing
     }
 }
