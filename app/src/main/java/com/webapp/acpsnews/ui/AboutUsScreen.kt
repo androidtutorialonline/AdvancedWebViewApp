@@ -1,5 +1,6 @@
 package com.webapp.acpsnews.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.core.content.ContextCompat.startActivity
 import com.webapp.acpsnews.MainActivity
@@ -32,16 +34,17 @@ class AboutUsScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme { // Wrap your content in a MaterialTheme
-                AboutUsContent(viewModel, this)
+                AboutUsContent(viewModel)
             }
         }
     }
 }
 
 @Composable
-fun AboutUsContent(viewModel: WebViewViewModel, aboutUsScreen: AboutUsScreen) {
+fun AboutUsContent(viewModel: WebViewViewModel) {
     var clickPrivacyPolicy by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -90,17 +93,17 @@ fun AboutUsContent(viewModel: WebViewViewModel, aboutUsScreen: AboutUsScreen) {
 
     if(clickPrivacyPolicy) {
         clickPrivacyPolicy = false
-        PrivacyPolicyContent(viewModel, aboutUsScreen)
+        PrivacyPolicyContent(viewModel, context)
     }
 
 }
 
 
 @Composable
-fun PrivacyPolicyContent(viewModel: WebViewViewModel, aboutUsScreen: AboutUsScreen) {
+fun PrivacyPolicyContent(viewModel: WebViewViewModel, context: Context) {
     viewModel.updateUrl("https://acpsnews.in/privacy-policy/")
     //WebViewScreen(viewModel, "Privacy Policy")
-    val intent = Intent(aboutUsScreen, MainActivity::class.java)
+    val intent = Intent(context, MainActivity::class.java)
     intent.putExtra("pageName", "Privacy Policy")
-    aboutUsScreen.startActivity(intent)
+    context.startActivity(intent)
 }

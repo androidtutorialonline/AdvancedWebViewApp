@@ -1,18 +1,22 @@
 import org.gradle.kotlin.dsl.implementation
+import org.gradle.kotlin.dsl.test
 
 
-
-apply {
-    //from("../ktlint.gradle.kts")
-    //from("../jacoco.gradle.kts")
-}
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("io.gitlab.arturbosch.detekt") version "1.23.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
     //alias("java")
 
+    id ("jacoco") // Add JaCoCo plugin
+
+}
+
+apply {
+    //from("../ktlint.gradle.kts")
+    //from("../jacoco.gradle.kts")
 }
 
 android {
@@ -53,6 +57,40 @@ android {
         //kotlinCompilerExtensionVersion '1.5.2'
     }
 
+}
+
+/*tasks.test {
+    useJUnitPlatform()
+    finalizedBy("jacocoTestReport")
+}*/
+
+ktlint {
+    version.set("0.49.1")
+    android.set(true)
+    outputColorName.set("RED")
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
+    }
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    //dependsOn(tasks.test)
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*")
+    val debugTree = fileTree("${buildDir}/intermediates/javac/debug") {
+        exclude(fileFilter)
+    }
+
+    classDirectories.setFrom(debugTree)
+    sourceDirectories.setFrom(files("src/main/java"))
+    executionData.setFrom(files("${buildDir}/jacoco/test.exec"))
 }
 
 dependencies {

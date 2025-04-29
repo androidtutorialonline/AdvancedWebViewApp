@@ -15,8 +15,10 @@ import com.webapp.acpsnews.R
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.webapp.acpsnews.MenuItem
@@ -28,6 +30,7 @@ fun WebViewScreen(viewModel: WebViewViewModel, pageName: String? = "") {
     val url by viewModel.url.collectAsState()
     val context = LocalContext.current
     var webView: WebView? = null
+    var isWeb by remember { mutableStateOf("webView") }
     var filePathCallback by remember { mutableStateOf<ValueCallback<Array<Uri>>?>(null) }
 
     val filePickerLauncher =
@@ -61,23 +64,22 @@ fun WebViewScreen(viewModel: WebViewViewModel, pageName: String? = "") {
                     items.add(MenuItem("Contact", " ", R.drawable.location))
                 }
 
-                items.forEach { (label, link) ->
+                items.forEach { (label, link, icon) ->
 
                     BottomNavigationItem(
-                        icon = {},
-                        label = { Text(label) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = icon),
+                                contentDescription = null,
+                                modifier = Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp)
+                            )
+                        },
+                        label = { Text(label, style = MaterialTheme.typography.body1) },
                         selected = url == link,
                         onClick = {
-                            if (label == "Contact") { // Example: Assuming you have an "About Us" item
-                                val intent = Intent(context, AboutUsScreen::class.java)
-                                context.startActivity(intent)
-                            } else if (label == "Radio") {
-                                val intent = Intent(context, RadioScreen::class.java)
-                                context.startActivity(intent)
-                            } else {
-                                viewModel.updateUrl(link)
-                                webView?.loadUrl(link)
-                            }
+                            isWeb = label
+                            viewModel.updateUrl(link)
+                            webView?.loadUrl(link)
                         }
                     )
                 }
@@ -94,76 +96,82 @@ fun WebViewScreen(viewModel: WebViewViewModel, pageName: String? = "") {
             },
             modifier = Modifier.fillMaxSize()
         ) {
-            AndroidView(
-                modifier = Modifier.fillMaxSize()
-                    .statusBarsPadding().navigationBarsPadding(),
-                factory = {
-                    WebView(it).apply {
-                        webView = this
-                        settings.javaScriptEnabled = true
-                        settings.allowFileAccess = true
-                        settings.domStorageEnabled = true
-                        settings.javaScriptCanOpenWindowsAutomatically = true
-                        settings.setSupportMultipleWindows(true)
+            if (isWeb == "Contact") {
+                AboutUsContent(viewModel)
+            } else if (isWeb == "Radio") {
+                RadioScreenContent()
+            } else {
+                AndroidView(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .statusBarsPadding()
+                        .navigationBarsPadding(),
+                    factory = {
+                        WebView(it).apply {
+                            webView = this
+                            settings.javaScriptEnabled = true
+                            settings.allowFileAccess = true
+                            settings.domStorageEnabled = true
+                            settings.javaScriptCanOpenWindowsAutomatically = true
+                            settings.setSupportMultipleWindows(true)
 
-                        webViewClient = object : WebViewClient() {
-                            override fun onPageStarted(
-                                view: WebView?,
-                                url: String?,
-                                favicon: Bitmap?
-                            ) {
-                                viewModel.setRefreshing(true)
+                            webViewClient = object : WebViewClient() {
+                                override fun onPageStarted(
+                                    view: WebView?,
+                                    url: String?,
+                                    favicon: Bitmap?
+                                ) {
+                                    viewModel.setRefreshing(true)
+                                }
+
+                                override fun onPageFinished(view: WebView?, url: String?) {
+                                    viewModel.updateNavigationState(
+                                        canGoBack = canGoBack(),
+                                        canGoForward = canGoForward()
+                                    )
+                                    viewModel.setRefreshing(false)
+
+                                    // JavaScript injection
+                                    evaluateJavascript(
+                                        "document.body.style.backgroundColor = '#FAFAFA';",
+                                        null
+                                    )
+                                }
+
+                                override fun onReceivedError(
+                                    view: WebView?,
+                                    request: WebResourceRequest?,
+                                    error: WebResourceError?
+                                ) {
+                                    viewModel.setRefreshing(false)
+
+                                    Log.e("WebViewScreen", "Error: ${error?.description}")
+                                    /*Toast.makeText(
+                                        context,
+                                        "Error: ${error?.description}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()*/
+                                }
                             }
 
-                            override fun onPageFinished(view: WebView?, url: String?) {
-                                viewModel.updateNavigationState(
-                                    canGoBack = canGoBack(),
-                                    canGoForward = canGoForward()
-                                )
-                                viewModel.setRefreshing(false)
-
-                                // JavaScript injection
-                                evaluateJavascript(
-                                    "document.body.style.backgroundColor = '#FAFAFA';",
-                                    null
-                                )
+                            webChromeClient = object : WebChromeClient() {
+                                override fun onShowFileChooser(
+                                    webView: WebView?,
+                                    filePath: ValueCallback<Array<Uri>>?,
+                                    fileChooserParams: FileChooserParams?
+                                ): Boolean {
+                                    filePathCallback = filePath
+                                    filePickerLauncher.launch("*/*")
+                                    return true
+                                }
                             }
-
-                            override fun onReceivedError(
-                                view: WebView?,
-                                request: WebResourceRequest?,
-                                error: WebResourceError?
-                            ) {
-                                viewModel.setRefreshing(false)
-
-                                Log.e("WebViewScreen", "Error: ${error?.description}")
-                                /*Toast.makeText(
-                                    context,
-                                    "Error: ${error?.description}",
-                                    Toast.LENGTH_SHORT
-                                ).show()*/
-                            }
+                            Log.d("WebViewScreen", "Loading URL: $url")
+                            loadUrl(viewModel.url.value)
                         }
-
-                        webChromeClient = object : WebChromeClient() {
-                            override fun onShowFileChooser(
-                                webView: WebView?,
-                                filePath: ValueCallback<Array<Uri>>?,
-                                fileChooserParams: FileChooserParams?
-                            ): Boolean {
-                                filePathCallback = filePath
-                                filePickerLauncher.launch("*/*")
-                                return true
-                            }
-                        }
-                        Log.d("WebViewScreen", "Loading URL: $url")
-                        loadUrl(viewModel.url.value)
-                    }
-                },
-                update = { webView = it }
-            )
-
-
+                    },
+                    update = { webView = it }
+                )
+            }
         }
     }
 }
