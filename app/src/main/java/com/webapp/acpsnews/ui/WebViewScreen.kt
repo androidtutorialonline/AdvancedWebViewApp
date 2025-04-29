@@ -95,6 +95,8 @@ fun WebViewScreen(viewModel: WebViewViewModel, pageName: String? = "") {
             modifier = Modifier.fillMaxSize()
         ) {
             AndroidView(
+                modifier = Modifier.fillMaxSize()
+                    .statusBarsPadding().navigationBarsPadding(),
                 factory = {
                     WebView(it).apply {
                         webView = this
@@ -133,11 +135,13 @@ fun WebViewScreen(viewModel: WebViewViewModel, pageName: String? = "") {
                                 error: WebResourceError?
                             ) {
                                 viewModel.setRefreshing(false)
-                                Toast.makeText(
+
+                                Log.e("WebViewScreen", "Error: ${error?.description}")
+                                /*Toast.makeText(
                                     context,
                                     "Error: ${error?.description}",
                                     Toast.LENGTH_SHORT
-                                ).show()
+                                ).show()*/
                             }
                         }
 

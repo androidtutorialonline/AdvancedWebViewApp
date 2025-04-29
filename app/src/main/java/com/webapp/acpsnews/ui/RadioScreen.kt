@@ -3,11 +3,14 @@ package com.webapp.acpsnews.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 
 class RadioScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        enableEdgeToEdge() // Add this
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme { // Wrap your content in a MaterialTheme
