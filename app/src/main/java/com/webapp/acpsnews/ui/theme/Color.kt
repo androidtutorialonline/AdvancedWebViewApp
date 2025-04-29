@@ -9,7 +9,6 @@ val PurpleGreyA = Color(PURPLE_GREY_A_HEX)
 private const val PINK_A_HEX = 0xFFEFB8C8
 val PinkA = Color(PINK_A_HEX)
 
-
 private const val PURPLE_B_HEX = 0xFF6650a4
 val PurpleB = Color(PURPLE_B_HEX)
 private const val PURPLE_GREY_B_HEX = 0xFF625b71

@@ -24,6 +24,6 @@ class WebViewViewModel : ViewModel() {
     }
 
     fun setRefreshing(refreshing: Boolean) {
-         isRefreshing = refreshing
+        isRefreshing = refreshing
     }
 }
