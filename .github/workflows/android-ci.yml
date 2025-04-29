@@ -25,7 +25,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Grant Execute Permission to Gradlew
-        run: chmod +x ./subdir/gradlew
+        run: chmod +x ./gradlew
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck
