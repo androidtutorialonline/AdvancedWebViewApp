@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -24,17 +23,23 @@ jobs:
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Grant Execute Permission to Gradlew
-        run: chmod +x ./gradlew
+      - name: Locate gradlew script
+        id: locate-gradlew
+        run: |
+          echo "Searching for gradlew..."
+          GRADLEW_PATH=$(find . -name gradlew -type f | head -n 1)
+          echo "Found gradlew at: $GRADLEW_PATH"
+          chmod +x "$GRADLEW_PATH"
+          echo "GRADLEW_PATH=$GRADLEW_PATH" >> $GITHUB_ENV
 
       - name: Run ktlint
-        run: ./gradlew ktlintCheck
+        run: $GRADLEW_PATH ktlintCheck
 
       - name: Run Detekt
-        run: ./gradlew detekt
+        run: $GRADLEW_PATH detekt
 
       - name: Run Tests with Coverage
-        run: ./gradlew testDebugUnitTest jacocoTestReport
+        run: $GRADLEW_PATH testDebugUnitTest jacocoTestReport
 
       - name: Upload Code Coverage Report
         uses: actions/upload-artifact@v4
