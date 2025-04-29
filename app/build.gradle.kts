@@ -1,11 +1,8 @@
-
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("io.gitlab.arturbosch.detekt") version "1.23.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.1"
     id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
     id("jacoco") // Add JaCoCo plugin
 }
@@ -59,6 +56,13 @@ android {
     finalizedBy("jacocoTestReport")
 }*/
 
+detekt {
+    toolVersion = "1.23.1"
+    // config = files("$rootDir/detekt-config.yml")
+    buildUponDefaultConfig = true
+    parallel = true
+}
+
 ktlint {
     version.set("0.49.1")
     android.set(true)
@@ -78,13 +82,13 @@ tasks.register<JacocoReport>("jacocoTestReport") {
     }
 
     val fileFilter = listOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*")
-    val debugTree = fileTree("$buildDir/intermediates/javac/debug") {
+
+    val debugTree = fileTree(project.layout.buildDirectory.dir("intermediates/javac/debug")) {
         exclude(fileFilter)
     }
-
     classDirectories.setFrom(debugTree)
     sourceDirectories.setFrom(files("src/main/java"))
-    executionData.setFrom(files("$buildDir/jacoco/test.exec"))
+    executionData.setFrom(files(project.layout.buildDirectory.dir("jacoco/test.exec")))
 }
 
 dependencies {

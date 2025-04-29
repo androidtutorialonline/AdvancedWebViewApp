@@ -1,0 +1,29 @@
+build:
+  maxIssues: 5
+  weights:
+    complexity: 2
+    LongParameterList: 1
+    style: 1
+
+style:
+  MagicNumber:
+    active: true
+    ignoreNumbers: [-1, 0, 1, 2]
+  OptionalUnit:
+    active: true
+
+  FunctionNaming:
+    active: true
+    functionPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ignoreAnnotated:
+      - Composable
+
+complexity:
+  LongMethod:
+    threshold: 100
+  LargeClass:
+    threshold: 500
+
+formatting:
+  active: true
+  autoCorrect: true
