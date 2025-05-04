@@ -18,10 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -85,7 +85,7 @@ fun WebViewScreen(viewModel: WebViewViewModel, pageName: String? = "") {
                                 modifier = Modifier.padding(16.dp, 8.dp, 16.dp, 8.dp),
                             )
                         },
-                        label = { Text(label, style = MaterialTheme.typography.body1) },
+                        label = { Text(label, style = MaterialTheme.typography.headlineMedium) },
                         selected = url == link,
                         onClick = {
                             isWeb = label
@@ -105,7 +105,8 @@ fun WebViewScreen(viewModel: WebViewViewModel, pageName: String? = "") {
                 viewModel.setRefreshing(true)
                 webView?.reload()
             },
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .padding(paddingValues),
         ) {
             if (isWeb == "Contact") {
                 AboutUsContent(viewModel)
