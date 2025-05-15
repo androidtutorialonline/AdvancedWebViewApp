@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "acpsnews"
 include(":app")
- 
+include(":core")
+include(":navigation")
+include(":feature_webview")

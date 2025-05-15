@@ -2,9 +2,19 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("io.gitlab.arturbosch.detekt") version "1.23.1"
+    id("io.gitlab.arturbosch.detekt") version "1.23.6"
     id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
+    id("com.google.gms.google-services")
+
+    // Add the Crashlytics Gradle plugin
+    id("com.google.firebase.crashlytics")
     id("jacoco") // Add JaCoCo plugin
+
+
+    //id("dagger.hilt.android.plugin")
+    //kotlin("android")
+    kotlin("kapt")
+
 }
 
 apply {
@@ -47,8 +57,76 @@ android {
     }
 
     composeOptions {
-        // kotlinCompilerExtensionVersion '1.5.2'
+        kotlinCompilerExtensionVersion = "1.5.1" // Use the appropriate version
     }
+
+    /*flavorDimensions += "environment"
+
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("String", "BASE_URL", "\"https://dev.example.com\"")
+        }
+        create("prod") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "\"https://www.example.com\"")
+        }
+    }*/
+
+
+    /*res/
+    ├── mipmap-anydpi-v26
+    │   ├── ic_launcher.xml (shared)
+    ├── dev/
+    │   └── mipmap-anydpi-v26
+    │       └── ic_launcher.xml (dev version)
+    ├── prod/
+    │   └── mipmap-anydpi-v26
+    │       └── ic_launcher.xml (prod version)
+
+
+    app/
+    ├── build.gradle.kts (flavors + entry point)
+    ├── src/
+    │   ├── dev/
+    │   ├── prod/
+    │   └── main/
+    core/
+    ├── utils/
+    ├── network/
+    ├── theme/
+    navigation/
+    ├── MainScreen.kt
+    feature-webview/
+    ├── WebViewScreen.kt
+    ├── navigation/
+    shared-test/
+    ├── cucumber/ (BDD test setup)
+
+
+    AdvancedWebViewApp-FullSource/
+├── core/                   # Common utilities and base classes
+├── navigation/             # Navigation and route handling
+├── feature-webview/        # WebView screen with Compose and controls
+├── app/                    # Main entry point and dependencies
+├── cucumber/               # BDD test setup with Cucumber
+├── build-logic/            # Custom Gradle plugins (optional)
+├── .github/                # GitHub Actions workflows
+├── setup.md                # This file
+├── settings.gradle.kts
+├── build.gradle.kts
+└── ...
+
+
+
+
+    */
+
+    //sourceSets["dev"].assets.srcDir("src/dev/assets")
+    //sourceSets["prod"].assets.srcDir("src/prod/assets")
+
 }
 
 /*tasks.test {
@@ -92,6 +170,27 @@ tasks.register<JacocoReport>("jacocoTestReport") {
 }
 
 dependencies {
+
+
+
+    implementation(project(":core"))
+    implementation(project(":feature_webview"))
+    implementation(project(":navigation"))
+
+    
+
+
+    testImplementation("io.cucumber:cucumber-java:7.11.2")
+    testImplementation("io.cucumber:cucumber-junit:7.11.2")
+    testImplementation("junit:junit:4.13.2")
+
+
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
+
+    //navigation
+    //files("src/main/res/navigation/nav_graph.xml")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

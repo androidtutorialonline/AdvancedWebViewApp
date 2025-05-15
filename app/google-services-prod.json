@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "277816594102",
+    "project_id": "test-5b1cf835",
+    "storage_bucket": "test-5b1cf835.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277816594102:android:40dab5f68cf85c8731e017",
+        "android_client_info": {
+          "package_name": "com.webapp.acpsnews"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFEtSGKmL-YNnzRS_AKASuSGSGHkLZOVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
