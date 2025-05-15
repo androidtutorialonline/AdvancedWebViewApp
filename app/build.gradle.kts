@@ -40,7 +40,7 @@ android {
             keyAlias = System.getenv("MYAPP_RELEASE_KEY_ALIAS") ?: project.property("MYAPP_RELEASE_KEY_ALIAS") as String
             keyPassword = System.getenv("MYAPP_RELEASE_KEY_PASSWORD") ?: project.property("MYAPP_RELEASE_KEY_PASSWORD") as String*/
 
-            //storeFile = rootProject.file(project.property("MYAPP_RELEASE_STORE_FILE") as String)
+            // storeFile = rootProject.file(project.property("MYAPP_RELEASE_STORE_FILE") as String)
             storeFile = file(project.property("MYAPP_RELEASE_STORE_FILE") as String)
             storePassword = project.property("MYAPP_RELEASE_STORE_PASSWORD") as String
             keyAlias = project.property("MYAPP_RELEASE_KEY_ALIAS") as String
