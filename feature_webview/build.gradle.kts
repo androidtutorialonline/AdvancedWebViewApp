@@ -3,6 +3,13 @@ plugins {
     id("com.android.library")
     //alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+
+    alias(libs.plugins.kotlin.compose)
+
+
+    //kotlin("android")
+    kotlin("kapt")
+    //id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -49,14 +56,17 @@ android {
 dependencies {
 
 
-    implementation("androidx.compose.ui:ui:1.5.4")
-    implementation("androidx.compose.material:material:1.5.4")
-    implementation("androidx.compose.material3:material3:1.2.0")
-    implementation("androidx.compose.runtime:runtime:1.5.4")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
-    implementation("androidx.webkit:webkit:1.8.0")
-    implementation("com.google.accompanist:accompanist-webview:0.30.1")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
+
+    implementation(libs.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.material3)
+    implementation(libs.androidx.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.webkit)
+    implementation(libs.google.accompanist.webview)
 
 
     implementation(libs.androidx.core.ktx)

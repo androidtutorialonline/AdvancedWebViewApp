@@ -1,15 +1,20 @@
 package com.webapp.acpsnews.webview
 
+import androidx.compose.runtime.mutableStateOf
+
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class WebViewViewModel : ViewModel() {
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+    // You can manage any WebView-related state here
+    private val _urlState = mutableStateOf("https://news.example.com")
+    val urlState = _urlState
 
-    fun setRefreshing(isRefreshing: Boolean) {
-        _isRefreshing.value = isRefreshing
+    fun loadUrl(url: String) {
+        viewModelScope.launch {
+            _urlState.value = url
+        }
     }
 }
