@@ -1,0 +1,8 @@
+// archive-naming.gradle.kts
+
+android {
+    setProperty(
+            "archivesBaseName",
+            "ACPSNEWS_${SimpleDateFormat("yyyyMMdd-HHmm").format(Date())}_v${defaultConfig.versionName}(${defaultConfig.versionCode})"
+    )
+}

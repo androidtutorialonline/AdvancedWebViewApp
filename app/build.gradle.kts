@@ -10,31 +10,54 @@ plugins {
 apply {
     // from("../ktlint.gradle.kts")
     // from("../jacoco.gradle.kts")
+    //from("../util.gradle")
 }
+
 
 android {
     namespace = "com.webapp.acpsnews"
     compileSdk = 35
+    //setProperty("archivesBaseName", getArtifactName(defaultConfig))
+    /*setProperty(
+        "archivesBaseName",
+        //"ACPSNEWS_${SimpleDateFormat("yyyyMMdd-HHmm").format(Date())}_v${defaultConfig.versionName}(${defaultConfig.versionCode})"
+        "ACPSNEWS_${SimpleDateFormat("dd_MMM_yyyy_HH_mm_a").format(Date())}"
+    )*/
 
-    defaultConfig {
+     defaultConfig {
         applicationId = "com.webapp.acpsnews"
         minSdk = 24
         targetSdk = 35
-        versionCode = 102
-        versionName = "1.02"
+        versionCode = 103
+        versionName = "1.03"
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getenv("MYAPP_RELEASE_STORE_FILE") ?: project.property("MYAPP_RELEASE_STORE_FILE") as String)
+            storePassword = System.getenv("MYAPP_RELEASE_STORE_PASSWORD") ?: project.property("MYAPP_RELEASE_STORE_PASSWORD") as String
+            keyAlias = System.getenv("MYAPP_RELEASE_KEY_ALIAS") ?: project.property("MYAPP_RELEASE_KEY_ALIAS") as String
+            keyPassword = System.getenv("MYAPP_RELEASE_KEY_PASSWORD") ?: project.property("MYAPP_RELEASE_KEY_PASSWORD") as String
         }
     }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

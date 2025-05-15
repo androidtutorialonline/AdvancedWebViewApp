@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -54,3 +54,21 @@ jobs:
         with:
           name: detekt-report
           path: build/reports/detekt
+
+      - name: Find release APK
+        id: find_apk
+        run: |
+          APK_PATH=$(find . -type f -name "*release*.apk" | head -n 1)
+          echo "APK_PATH=$APK_PATH" >> $GITHUB_ENV
+          echo "Found APK: $APK_PATH"
+
+      - name: Build Release APK
+        run: $GRADLEW_PATH assembleRelease
+
+      - name: Upload APK to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          groups: ${{ secrets.FIREBASE_TESTERS }}
+          file: app/build/outputs/apk/release/app-release.apk
